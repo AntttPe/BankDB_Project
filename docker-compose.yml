@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  database:
+    image: postgres:16  # Używamy stabilnej wersji 16
+    container_name: bank_db_container
+    environment:
+      POSTGRES_USER: admin           # Twój login
+      POSTGRES_PASSWORD: admin  # Twoje hasło (zmień jeśli chcesz)
+      POSTGRES_DB: bankowosc_db      # Nazwa bazy danych, która powstanie na starcie
+    ports:
+      - "5432:5432"  # Przekierowanie portu: Twój Mac (5432) -> Kontener (5432)
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data  # Tu będą zapisywane fizyczne dane (trwałość)
+    restart: always
