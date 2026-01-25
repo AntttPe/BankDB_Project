@@ -1,4 +1,4 @@
-
+DROP TABLE IF EXISTS kredyty;
 CREATE TABLE kredyty(
     id_kredytu SERIAL PRIMARY KEY,
     kwota_calkowita decimal(12,2),
@@ -9,6 +9,4 @@ CREATE TABLE kredyty(
     FOREIGN KEY (id_konta) REFERENCES konta(id_konta)
 );
 
-INSERT INTO kredyty(kwota_calkowita, oprocentowanie, id_konta)
-VALUES(100000.5, 0.1,1);
 

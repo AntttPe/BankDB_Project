@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS karty
+DROP TABLE IF EXISTS karty;
 CREATE TABLE karty(
     id_karty SERIAL PRIMARY KEY,
     numer_karty bigint NOT NULL UNIQUE,
@@ -11,6 +11,3 @@ CREATE TABLE karty(
     CHECK(numer_karty BETWEEN 1000000000000000 and 9999999999999999)
 )
 -- trigger czy ważnosć > data dzisiejsza
-
-INSERT INTO karty(numer_karty, data_ważności, cvv, id_konta)
-VALUES (1000100010001000, '2030_01_10', 100, 2);

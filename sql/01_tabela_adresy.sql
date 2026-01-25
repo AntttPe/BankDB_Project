@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS adresy;
 CREATE TABLE adresy(
     id_adresu SERIAL PRIMARY KEY,
     ulica varchar(100) NOT NULL,
@@ -7,8 +8,19 @@ CREATE TABLE adresy(
     kraj varchar(100) NOT NULL,
     CHECK (kod_pocztowy ~'^[0-9]{2}\-[0-9]{3}')
 );
-INSERT INTO adresy(ulica, nr_domu, kod_pocztowy, miasto, kraj)
-VALUES ('Mocna', 105, '10-100', 'Kraków', 'Polska')
 
-INSERT INTO adresy(ulica, nr_domu, kod_pocztowy, miasto, kraj)
-VALUES ('Silna', 15, '15-100', 'Warszawa', 'Polska')
+INSERT INTO adresy (
+    ulica,
+    nr_domu,
+    kod_pocztowy,
+    miasto,
+    kraj
+)
+VALUES (
+           'Kwiatowa',
+           12,
+           '00-123',
+           'Warszawa',
+           'Polska'
+       );
+

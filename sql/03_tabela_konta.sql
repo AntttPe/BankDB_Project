@@ -1,4 +1,4 @@
-
+DROP TABLE IF EXISTS konta;
 CREATE TABLE konta(
     id_konta SERIAL PRIMARY KEY,
     typ_konta varchar(50) DEFAULT 'Zwykłe',
@@ -9,10 +9,5 @@ CREATE TABLE konta(
     FOREIGN KEY (id_klienta) REFERENCES klienci(id_klienta)
 );
 
-INSERT INTO konta(typ_konta, saldo_bieżące,  waluta, czy_aktywne, id_klienta)
-VALUES('Oszczędnościowe', 100, 'ZŁ', true, 3);
-
-INSERT INTO konta(saldo_bieżące, czy_aktywne, id_klienta)
-VALUES(0,true,4);
 
 --trigger czy wiek < 26; wtedy konto = młodzieżowe

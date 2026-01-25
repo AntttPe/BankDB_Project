@@ -1,6 +1,7 @@
--- Plik: sql/01_tabela_klienci.sql
+-- Plik: sql/02_tabela_klienci.sql
 -- tabela klienci
 -- SERIAL - baza bedzie nadawac sama kolejne numery (1, 2, 3...)
+DROP TABLE IF EXISTS klienci;
 CREATE TABLE klienci (
     id_klienta SERIAL PRIMARY KEY,
     imie VARCHAR(50) NOT NULL,
@@ -17,14 +18,21 @@ CREATE TABLE klienci (
     CHECK (telefon ~'^\+[0-9]{10,12}$')
 );
 
--- dwaj przykłądowi klięci
-INSERT INTO klienci (imie, nazwisko, pesel, dataurodzenia, telefon, id_adresu, email)
-VALUES ('Jan', 'Kowalski',  90010112345, '1990-01-02', '+48505505505', 1, 'jan.kowalski@email.com');
-
-INSERT INTO klienci (imie, nazwisko, pesel, dataurodzenia, telefon, id_adresu, email)
-VALUES ('Anna', 'Nowak', 95050554321, '2005-06-21', '+7505506509', 2, 'anna.nowak@email.com');
-
-INSERT INTO klienci (imie, nazwisko, pesel, dataurodzenia, telefon,  id_adresu, email)
-VALUES ('Adam', 'Małysz', 11111111111, '1978-08-30', '+7508508508', 2,  'elo@asd.pl')
-
-
+INSERT INTO klienci (
+    imie,
+    nazwisko,
+    pesel,
+    dataurodzenia,
+    email,
+    telefon,
+    id_adresu
+)
+VALUES (
+           'Jan',
+           'Kowalski',
+           90010112345,
+           '1990-01-01',
+           'jan.kowalski@email.com',
+           '+48123456789',
+           1
+       );

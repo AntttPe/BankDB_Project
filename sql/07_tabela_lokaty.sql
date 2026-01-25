@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS lokaty;
+
 CREATE TABLE lokaty (
     id_lokaty SERIAL PRIMARY KEY,
     kwota_poczotkowa DECIMAL(12,2) NOT NULL,
@@ -9,5 +11,3 @@ CREATE TABLE lokaty (
     FOREIGN KEY (id_konta) REFERENCES konta(id_konta)
 );
 
-INSERT INTO lokaty(kwota_poczotkowa, oprocentowanie, data_zakonczenia, id_konta)
-VALUES (1000000, 0.5,'2029-01-24',4)
