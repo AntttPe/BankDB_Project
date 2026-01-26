@@ -23,7 +23,7 @@ CREATE TABLE logi_bezpieczenstwa (
     ip_adres INET
 );
 
--- 11. Audyt zmian salda (Kluczowe dla banku!)
+-- 11. audyt zmian salda
 CREATE TABLE audyt_sald (
     id_audytu BIGSERIAL PRIMARY KEY,
     id_konta INT REFERENCES konta(id_konta),
@@ -67,7 +67,7 @@ SELECT
     id_klienta,
     imie,
     nazwisko,
-    -- maskowanie PESELU: zostawiamy 2 pierwsze i 2 ostatnie cyfry
+    -- maskowanie numeru pesel: zostawiamy 2 pierwsze i 2 ostatnie cyfry
     CONCAT(LEFT(CAST(pesel AS TEXT), 2), '*******', RIGHT(CAST(pesel AS TEXT), 2)) AS pesel_masked,
     email,
     telefon
