@@ -5,6 +5,7 @@ CREATE OR REPLACE PROCEDURE wykonaj_przelew(
     p_tytul VARCHAR
 )
     LANGUAGE plpgsql
+    SECURITY DEFINER
 AS $$
 DECLARE
     v_saldo_nadawcy DECIMAL;
