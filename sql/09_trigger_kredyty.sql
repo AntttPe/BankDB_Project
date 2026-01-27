@@ -6,6 +6,7 @@ BEGIN
         SELECT COALESCE(SUM(kwota_raty), 0)
         FROM harmonogram
         WHERE id_kredytu = kredyty.id_kredytu
+             AND czy_oplacona = TRUE
     )
     WHERE id_kredytu = NEW.id_kredytu OR id_kredytu = OLD.id_kredytu;
 

@@ -87,6 +87,8 @@ DO $$
         v_kredyt_id INT;
         v_raty_ilosc INT := 12;
         j INT;
+        v_termin DATE;
+        v_czy_oplacona BOOLEAN;
     BEGIN
         FOR r IN SELECT id_konta FROM konta LOOP
 
@@ -116,27 +118,41 @@ DO $$
 
                 -- 3. KREDYTY (20% szans)
                 IF (random() < 0.2) THEN
-                    -- A) Wstawiamy kredyt
-                    INSERT INTO kredyty (kwota_calkowita, oprocentowanie, data_udzielenia, id_konta)
-                    VALUES (
-                               (random() * 20000 + 2000)::decimal(12,2), -- Kredyt 2000-22000
-                               0.08, -- Stałe oprocentowanie 8%
-                               CURRENT_DATE - INTERVAL '1 year', -- Udzielony rok temu
-                               r.id_konta
-                           )
-                    RETURNING id_kredytu INTO v_kredyt_id;
+                -- A) Wstawiamy kredyt
+                INSERT INTO kredyty (kwota_calkowita, oprocentowanie, data_udzielenia, id_konta)
+                VALUES (
+                           (random() * 200000 + 2000)::decimal(12,2),
+                           0.08,
+                           CURRENT_DATE - INTERVAL '1 year',
+                           r.id_konta
+                       )
+                RETURNING id_kredytu INTO v_kredyt_id;
 
-                    -- B) Generujemy harmonogram (raty) dla tego kredytu
-                    FOR j IN 1..v_raty_ilosc LOOP
-                            INSERT INTO harmonogram (id_kredytu, termin_platonsci, kwota_raty, nr_raty)
-                            VALUES (
-                                       v_kredyt_id,
-                                       CURRENT_DATE - INTERVAL '1 year' + (j || ' months')::interval,
-                                       (SELECT kwota_calkowita / v_raty_ilosc FROM kredyty WHERE id_kredytu = v_kredyt_id),
-                                       j
-                                   );
-                        END LOOP;
-                END IF;
+                -- B) Generujemy harmonogram
+                FOR j IN 1..v_raty_ilosc LOOP
+                        -- Wyliczamy datę raty
+                        v_termin := (CURRENT_DATE - INTERVAL '1 year' + (j || ' months')::interval)::DATE;
 
-            END LOOP;
+                        --  jeśli termin był wczoraj lub dawniej, to uznajemy za spłaconą
+                        IF v_termin < CURRENT_DATE THEN
+                            v_czy_oplacona := TRUE;
+                        ELSE
+                            v_czy_oplacona := FALSE;
+                        END IF;
+
+                        INSERT INTO harmonogram (id_kredytu, termin_platonsci, kwota_raty, nr_raty, czy_oplacona)
+                        VALUES (
+                                   v_kredyt_id,
+                                   v_termin,
+                                   -- dzielenie może powodować błędy groszowe (np. 100/3 = 33.33),
+                                   -- co sprawi, że suma rat nie da idealnie kwoty całkowitej.
+                                   -- Na potrzeby testów jest OK, w produkcji ostatnia rata wyrównuje różnicę.
+                                   (SELECT round(kwota_calkowita / v_raty_ilosc, 2) FROM kredyty WHERE id_kredytu = v_kredyt_id),
+                                   j,
+                                   v_czy_oplacona
+                               );
+                    END LOOP;
+            END IF;
+
+        END LOOP;
     END $$;

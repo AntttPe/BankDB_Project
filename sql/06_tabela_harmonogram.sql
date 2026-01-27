@@ -5,5 +5,6 @@ CREATE TABLE harmonogram(
     termin_platonsci DATE,
     kwota_raty decimal(100,2) NOT NULL,
     nr_raty int4 NOT NULL,
+    czy_oplacona BOOLEAN DEFAULT FALSE,
     FOREIGN KEY (id_kredytu) REFERENCES kredyty(id_kredytu)
 );
