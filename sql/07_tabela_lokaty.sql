@@ -10,4 +10,3 @@ CREATE TABLE lokaty (
     kwota_koncowa DECIMAL(12,2),
     FOREIGN KEY (id_konta) REFERENCES konta(id_konta)
 );
-

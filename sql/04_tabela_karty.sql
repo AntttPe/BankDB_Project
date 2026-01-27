@@ -11,3 +11,4 @@ CREATE TABLE karty(
     CHECK(numer_karty BETWEEN 1000000000000000 and 9999999999999999)
 )
 -- trigger czy ważnosć > data dzisiejsza
+

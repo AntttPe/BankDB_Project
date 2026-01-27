@@ -6,14 +6,14 @@ CREATE TABLE klienci (
     id_klienta SERIAL PRIMARY KEY,
     imie VARCHAR(50) NOT NULL,
     nazwisko VARCHAR(50) NOT NULL,
-    pesel bigint UNIQUE NOT NULL, -- pesle musi mieć 11 znaków i być unikalny
+    pesel bigint UNIQUE NOT NULL,
     dataurodzenia DATE NOT NULL,
     email VARCHAR(100),
     telefon varchar(12) UNIQUE NOT NULL,
     id_adresu int4 NOT NULL,
     data_rejestracji DATE DEFAULT CURRENT_DATE,
     FOREIGN KEY (id_adresu) REFERENCES adresy(id_adresu),
-    CHECK (email ~ '.*@{1}.*\.{1}.*'), -- do triggera raczej to jest, bo sie serial id psuje jak sie zrobi źle insert
+    CHECK (email ~ '.*@{1}.*\.{1}.*'),
     CHECK (pesel BETWEEN 10000000000 and 99999999999),
     CHECK (telefon ~'^\+[0-9]{10,12}$')
 );
