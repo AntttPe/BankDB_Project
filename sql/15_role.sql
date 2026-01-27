@@ -11,7 +11,7 @@ CREATE ROLE role_kierownik NOLOGIN;
 
 GRANT CONNECT ON DATABASE "bankowosc_db" TO role_klient, role_pracownik, role_kierownik;
 GRANT USAGE ON SCHEMA public TO role_klient, role_pracownik, role_kierownik;
-GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO role_klient, role_pracownik, role_kierownik;
+GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO role_pracownik, role_kierownik;
 
 GRANT SELECT ON konta TO role_klient;
 GRANT SELECT ON karty TO role_klient;

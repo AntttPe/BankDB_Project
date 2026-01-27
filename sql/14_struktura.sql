@@ -72,3 +72,4 @@ SELECT
     email,
     telefon
 FROM klienci;
+
