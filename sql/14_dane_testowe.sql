@@ -1,4 +1,3 @@
---generowanei 50 klientów
 DO $$
     DECLARE
         i INT;
@@ -15,7 +14,7 @@ DO $$
     BEGIN
         FOR i IN 1..50 LOOP
 
-                --wiek 18-60 i losuje randomowy dzień
+
                 v_random_data := CURRENT_DATE - (floor(random() * (60-18+1) + 18) || ' years')::interval - (random() * 365 || ' days')::interval;
                 v_random_pesel := (floor(random() * (99999999999 - 10000000000 + 1) + 10000000000))::bigint;
                 v_miasto := v_miasta[floor(random() * array_length(v_miasta, 1) + 1)];
@@ -47,7 +46,7 @@ DO $$
             END LOOP;
     END $$;
 
--- 100 transakcji
+-- 100000 transakcji
 DO $$
     DECLARE
         i INT;
@@ -104,7 +103,7 @@ DO $$
                            ) ON CONFLICT DO NOTHING;
                 END IF;
 
-                -- 2. LOKATY (30% szans)
+                -- 30% szans
                 IF (random() < 0.3) THEN
                     INSERT INTO lokaty (kwota_poczotkowa, oprocentowanie, data_zalozenia, data_zakonczenia, id_konta)
                     VALUES (
@@ -116,9 +115,9 @@ DO $$
                            );
                 END IF;
 
-                -- 3. KREDYTY (20% szans)
+                -- 20% szans
                 IF (random() < 0.2) THEN
-                -- A) Wstawiamy kredyt
+
                 INSERT INTO kredyty (kwota_calkowita, oprocentowanie, data_udzielenia, id_konta)
                 VALUES (
                            (random() * 200000 + 2000)::decimal(12,2),
@@ -128,7 +127,6 @@ DO $$
                        )
                 RETURNING id_kredytu INTO v_kredyt_id;
 
-                -- B) Generujemy harmonogram
                 FOR j IN 1..v_raty_ilosc LOOP
                         -- Wyliczamy datę raty
                         v_termin := (CURRENT_DATE - INTERVAL '1 year' + (j || ' months')::interval)::DATE;
@@ -144,9 +142,6 @@ DO $$
                         VALUES (
                                    v_kredyt_id,
                                    v_termin,
-                                   -- dzielenie może powodować błędy groszowe (np. 100/3 = 33.33),
-                                   -- co sprawi, że suma rat nie da idealnie kwoty całkowitej.
-                                   -- Na potrzeby testów jest OK, w produkcji ostatnia rata wyrównuje różnicę.
                                    (SELECT round(kwota_calkowita / v_raty_ilosc, 2) FROM kredyty WHERE id_kredytu = v_kredyt_id),
                                    j,
                                    v_czy_oplacona

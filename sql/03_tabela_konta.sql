@@ -12,4 +12,3 @@ CREATE TABLE konta(
 
 --trigger czy wiek < 26; wtedy konto = młodzieżowe
 
-CALL wykonaj_przelew(6,4,10000,'wypłata');
