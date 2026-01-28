@@ -150,4 +150,10 @@ DO $$
             END IF;
 
         END LOOP;
+
+        --Konto testowe dla jana klienta
+        INSERT INTO konta (typ_konta, saldo_bieżące, waluta, czy_aktywne, id_klienta)
+        VALUES ('Zwykłe', 1000.00, 'ZŁ', true, 1);
+
+
     END $$;
