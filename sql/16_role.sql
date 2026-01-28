@@ -15,6 +15,7 @@ GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO role_pracownik, role_ki
 
 GRANT SELECT ON konta TO role_klient;
 GRANT SELECT ON karty TO role_klient;
+GRANT SELECT ON klienci TO role_klient;
 GRANT SELECT ON transakcje TO role_klient;
 GRANT SELECT ON kredyty TO role_klient;
 GRANT SELECT ON lokaty TO role_klient;
