@@ -4,7 +4,7 @@ SET ROLE ewa_szefowa;
 SELECT 'KIEROWNIK - audyt' AS test, uzytkownik_wykonujacy, kwota_zmiany, data_zmiany
 FROM audyt_sald
 ORDER BY data_zmiany DESC
-LIMIT 5;
+LIMIT 50;
 
 
 SELECT 'KIEROWNIK - raport finansowy' AS test,
