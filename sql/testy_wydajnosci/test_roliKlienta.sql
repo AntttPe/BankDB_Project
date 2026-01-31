@@ -10,7 +10,7 @@ LIMIT 3;
 
 
 -- TRZEBA PRZED TESTEM ZOBACZYC ID JANA
-CALL wykonaj_przelew( 1,101, 50,'Test przelewu klient');
+CALL wykonaj_przelew( 1,10, 50,'Test przelewu klient');
 
 --Próba zmiany salda
  --SET ROLE jan_klient;

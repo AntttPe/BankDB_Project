@@ -7,6 +7,6 @@ CREATE TABLE lokaty (
     data_zalozenia DATE DEFAULT CURRENT_DATE,
     data_zakonczenia DATE NOT NULL,
     id_konta int4 NOT NULL,
-    kwota_koncowa DECIMAL(12,2),
+    kwota_koncowa DECIMAL(15,2),
     FOREIGN KEY (id_konta) REFERENCES konta(id_konta)
 );
