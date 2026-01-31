@@ -75,95 +75,122 @@ Wymagany jest Docker oraz Docker Compose.
 Diagram ERD (Entity Relationship Diagram) obrazuje on powiązania między klientami, produktami bankowymi a modułem bezpieczeństwa.
 
 ```mermaid
-erDiagram
-    %% --- MODUŁ KLIENTA ---
-    ADRESY ||--|{ KLIENCI : "mieszka pod"
-    KLIENCI ||--|{ KONTA : "posiada"
+classDiagram
+direction BT
+class adresy {
+   varchar(100) ulica
+   integer nr_domu
+   varchar(6) kod_pocztowy
+   varchar(100) miasto
+   varchar(100) kraj
+   integer id_adresu
+}
+class audyt_sald {
+   integer id_konta
+   numeric(15,2) stare_saldo
+   numeric(15,2) nowe_saldo
+   numeric(15,2) kwota_zmiany
+   timestamp data_zmiany
+   varchar(50) uzytkownik_wykonujacy
+   bigint id_audytu
+}
+class harmonogram {
+   integer id_kredytu
+   date termin_platonsci
+   numeric(15,2) kwota_raty
+   integer nr_raty
+   boolean czy_oplacona
+   integer id_raty
+}
+class karty {
+   bigint numer_karty
+   date data_ważności
+   integer cvv
+   boolean czy_zablokowana
+   integer id_konta
+   integer id_karty
+}
+class klienci {
+   varchar(50) imie
+   varchar(50) nazwisko
+   bigint pesel
+   date dataurodzenia
+   varchar(100) email
+   varchar(12) telefon
+   integer id_adresu
+   date data_rejestracji
+   varchar(50) login_db
+   integer id_klienta
+}
+class konta {
+   varchar(50) typ_konta
+   numeric(12,2) saldo_bieżące
+   varchar(4) waluta
+   boolean czy_aktywne
+   integer id_klienta
+   integer id_konta
+}
+class kredyty {
+   numeric(15,2) kwota_calkowita
+   numeric(15,2) do_splaty
+   numeric(6,4) oprocentowanie
+   date data_udzielenia
+   integer id_konta
+   integer id_kredytu
+}
+class logi_bezpieczenstwa {
+   timestamp data_zdarzenia
+   varchar(50) uzytkownik_db
+   varchar(50) typ_zdarzenia
+   text opis
+   inet ip_adres
+   integer id_logu
+}
+class lokaty {
+   numeric(15,2) kwota_poczotkowa
+   numeric(5,4) oprocentowanie
+   date data_zalozenia
+   date data_zakonczenia
+   integer id_konta
+   numeric(15,2) kwota_koncowa
+   integer id_lokaty
+}
+class mv_statystyki_miesieczne {
+   numeric rok
+   numeric miesiac
+   bigint liczba_transakcji
+   numeric suma_obrotow
+}
+class transakcje {
+   numeric(15,2) kwota
+   date data_transakcji
+   varchar(100) tytul
+   integer id_konta_zrodlowego
+   integer id_konta_docelowego
+   varchar(30) typ_transakcji
+   integer id_transakcji
+}
+class typy_transakcji {
+   varchar(50) nazwa_pelna
+   varchar(10) kod_typu
+}
+class v_klienci_rodo {
+   integer id_klienta
+   varchar(50) imie
+   varchar(50) nazwisko
+   text pesel_masked
+   varchar(100) email
+   varchar(12) telefon
+}
 
-    ADRESY {
-        int id_adresu PK
-        string miasto
-        string ulica
-        string kod_pocztowy
-    }
+audyt_sald  -->  konta : id_konta
+harmonogram  -->  kredyty : id_kredytu
+karty  -->  konta : id_konta
+klienci  -->  adresy : id_adresu
+konta  -->  klienci : id_klienta
+kredyty  -->  konta : id_konta
+lokaty  -->  konta : id_konta
+transakcje  -->  konta : id_konta_zrodlowego:id_konta
+transakcje  -->  konta : id_konta_docelowego:id_konta
 
-    KLIENCI {
-        int id_klienta PK
-        string imie
-        string nazwisko
-        string pesel
-        string login_db "Klucz_RLS"
-        int id_adresu FK
-    }
-
-    %% --- MODUŁ PRODUKTOWY ---
-    KONTA ||--o{ KARTY : "ma_wydane"
-    KONTA ||--o{ LOKATY : "zasilaja"
-    KONTA ||--o{ KREDYTY : "zasilaja"
-    KREDYTY ||--|{ HARMONOGRAM : "splata"
-
-    KONTA {
-        int id_konta PK
-        string typ_konta
-        decimal saldo
-        boolean aktywne
-    }
-
-    KARTY {
-        int id_karty PK
-        bigint numer_karty
-        date data_waznosci
-    }
-
-    KREDYTY {
-        int id_kredytu PK
-        decimal kwota_calkowita
-        decimal do_splaty
-    }
-
-    HARMONOGRAM {
-        int id_raty PK
-        date termin_platnosci
-        boolean czy_oplacona
-    }
-
-    %% --- MODUŁ TRANSAKCYJNY ---
-    KONTA ||--o{ TRANSAKCJE : "nadawca_odbiorca"
-    TYPY_TRANSAKCJI ||--|{ TRANSAKCJE : "typ"
-
-    TRANSAKCJE {
-        int id_transakcji PK
-        string tytul
-        decimal kwota
-        date data
-        string typ_transakcji FK
-    }
-
-    TYPY_TRANSAKCJI {
-        string kod_typu PK
-        string nazwa
-    }
-
-    %% --- BEZPIECZENSTWO ---
-    KONTA ||--o{ AUDYT_SALD : "Trigger_Update"
-    
-    AUDYT_SALD {
-        bigint id_audytu PK
-        decimal stare_saldo
-        decimal nowe_saldo
-        string kto_zmienil
-    }
-
-    LOGI_BEZPIECZENSTWA {
-        int id_logu PK
-        string zdarzenie
-        string opis
-    }
-
-    MV_STATYSTYKI {
-        int rok
-        int miesiac
-        decimal suma
-        string typ "Widok_Zmaterializowany"
-    }
 ```
