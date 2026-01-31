@@ -1,7 +1,7 @@
 DROP TABLE IF EXISTS transakcje;
 CREATE TABLE transakcje(
     id_transakcji SERIAL PRIMARY KEY,
-    kwota decimal(100,2) NOT NULL,
+    kwota decimal(15,2) NOT NULL,
     data_transakcji DATE DEFAULT CURRENT_DATE,
     tytul varchar(100) NOT NULL,
     id_konta_zrodlowego int4 NOT NULL,

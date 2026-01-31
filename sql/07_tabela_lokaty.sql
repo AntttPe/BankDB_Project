@@ -2,7 +2,7 @@ DROP TABLE IF EXISTS lokaty;
 
 CREATE TABLE lokaty (
     id_lokaty SERIAL PRIMARY KEY,
-    kwota_poczotkowa DECIMAL(12,2) NOT NULL,
+    kwota_poczotkowa DECIMAL(15,2) NOT NULL,
     oprocentowanie DECIMAL(5,4) NOT NULL,
     data_zalozenia DATE DEFAULT CURRENT_DATE,
     data_zakonczenia DATE NOT NULL,
